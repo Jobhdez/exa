@@ -27,11 +27,22 @@ _num   : INT | FLOAT
 %ignore WS
     '''
 # keyword : /[a-z]+/
+
+
 parser = lark.Lark(grammar)
 
 
-## Nodes
+### Parse Nodes
+
+class Program:
+    "PROGRAM node."
+    def __init__(self, expressions):
+        self.expressions = expressions
+
+    def __repr__(self):
+        return f'(Program {self.expressions})'
 class If:
+    "IF node."
     def __init__(self, condition, scmthen, scmelse):
         self.condition = condition
         self.scmthen = scmthen
@@ -41,6 +52,7 @@ class If:
         return f'(IF (Condition {self.condition}) (Then {self.scmthen}) (Else {self.scmelse}))'
 
 class List:
+    "LIST node."
     def __init__(self, expressions):
         self.expressions = expressions
 
@@ -48,6 +60,7 @@ class List:
         return f'(List {self.expressions})'
 
 class Atom:
+    "ATOM node."
     def __init__(self, atom):
         self.atom = atom
 
@@ -55,6 +68,7 @@ class Atom:
         return f'(Atom {self.atom})'
 
 class Int:
+    "INT node."
     def __init__(self, num):
         self.num = num
 
@@ -62,6 +76,7 @@ class Int:
         return f'(Int {self.num})'
 
 class Let:
+    "LET node."
     def __init__(self, bindings, body):
         self.bindings = bindings
         self.body = body
@@ -70,6 +85,7 @@ class Let:
         return f'(Let (Binding {self.bindings}) (Body {self.body}))'
 
 class Binding:
+    "BINDING node."
     def __init__(self, bindings):
         self.bindings = bindings
 
@@ -77,10 +93,16 @@ class Binding:
         return f'{self.bindings}'
 
 def make_parse_tree(tree):
+    """
+    converts the original parse tree into a new parse tree.
+
+    @param tree: the original parse tree
+    @returns: a new parse tree.
+    """
     match tree:
         case x if isinstance(x, lark.tree.Tree):
             if tree.data == 'start':
-                return [make_parse_tree(x) for x in tree.children]
+                return Program([make_parse_tree(x) for x in tree.children])
             elif tree.data == 'if':
                 if_exps = [make_parse_tree(x) for x in tree.children]
                 if_cond = if_exps[0]
