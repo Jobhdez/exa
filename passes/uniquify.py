@@ -12,10 +12,16 @@ def uniquify(ast, lets_dict, counter):
         (let ((x 2)) (+ (let ((x 5)) x) x))
         -> 
         (let ((x.1 2)) (+ (let ((x.2 5)) x.2) x.1))
+
     Example 2:
         (let ((x 1)) (+ (let ((x 4)) (+ (let ((x 5)) x) x)) x))
         ->
         (let ((x.1 1)) (+ (let ((x.2 4)) (+ (let ((x.3)) x.3) x.2) x.1))
+    
+    Example 3:
+        (let ((x 1)) (+ (let ((x 4)) (+ (let ((x 5)) (+ (let ((x 6)) x) x)) x)) x))
+        ->
+        (let ((x.1 1)) (+ (let ((x.2 4)) (+ (let ((x.3 5)) (+ (let ((x.4 6)) x.4) x.3)) x.2)) x.1))
     """
     number_of_lets = lets_dict
     match ast:
