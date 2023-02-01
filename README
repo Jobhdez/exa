@@ -28,7 +28,7 @@ Currently, it can parse `if` and `let` expressions, and combinations
       `make_parse_tree(ast)` -> [(Let (Binding [[(Atom x), (Int 3)], [(Atom y), (Int 4)], [(Atom z), (Int 5)]]) (Body (List [(Atom +), (Atom x), (Atom y), (Atom z)])))]
 
 +-----------------+
-| Acknoledgements |
+| Acknowledgements |
 |                 |
 +-----------------+
 
