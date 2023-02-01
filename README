@@ -7,7 +7,7 @@ I am just doing this project out of curiosity. I want to know how it is like to 
 
 The start a Scheme compiler in Python.
 
-Currently, it can parse `if` and `let` expressions, and combinations
+Currently, it can parse `if` and `let` expressions, and combinations. it can also uniquify the ast. see example in the `uniquify` file.
 
 +-------------+
 | dependencies|
@@ -21,11 +21,7 @@ Currently, it can parse `if` and `let` expressions, and combinations
 |                 |
 +-----------------+
 
-1) load the file by: `exec(open('parser.py').read())`
-2) parse an expression: e.g.,
-      `ast = parser.parse("(let ((x 3) (y 4) (z 5)) (+ x y z))")
-3) make ast:
-      `make_parse_tree(ast)` -> [(Let (Binding [[(Atom x), (Int 3)], [(Atom y), (Int 4)], [(Atom z), (Int 5)]]) (Body (List [(Atom +), (Atom x), (Atom y), (Atom z)])))]
+1) `git clone git@github.com:Jobhdez/exa.git`
 
 +-----------------+
 | Acknowledgements |
