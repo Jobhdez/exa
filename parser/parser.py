@@ -102,7 +102,7 @@ def make_parse_tree(tree):
     match tree:
         case x if isinstance(x, lark.tree.Tree):
             if tree.data == 'start':
-                return Program([make_parse_tree(x) for x in tree.children])
+                return [make_parse_tree(x) for x in tree.children]
             elif tree.data == 'if':
                 if_exps = [make_parse_tree(x) for x in tree.children]
                 if_cond = if_exps[0]
