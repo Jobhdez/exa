@@ -5,9 +5,6 @@
 
 I am just doing this project out of curiosity. I want to know how it is like to build a compiler in Python; so far, I am having fun programming this. Thanks
 
-The start a Scheme compiler in Python.
-
-Currently, it can parse `if` and `let` expressions, and combinations. it can also uniquify the ast. see example in the `uniquify` file.
 
 +-------------+
 | dependencies|
