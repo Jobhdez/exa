@@ -53,6 +53,21 @@ def explicate_control(ast, counter, vars, assignments):
            x.2 = 4
            x.3 = 5
            return x.1 + x.2 + x.4
+
+    Example 3:
+       (let ((temp.1 (- 10))) (+ 53 temp.1))
+       ->
+       start:
+          temp.1 = - 10
+          return 53 + temp1
+
+    Example 4:
+        (let ((x (let ((temp.1 (- 3))) (+ 10 temp.1))) x)
+        ->
+        start:
+            temp1 = - 3
+            x = 10 + temp1
+            return x
     """
     
     vars = vars
@@ -61,14 +76,34 @@ def explicate_control(ast, counter, vars, assignments):
         case x if isinstance(x, Int):
             return x
         case x if isinstance(x, Let):
-            bindings = x.bindings.bindings 
-            var, exp = bindings
-            vars[counter] = var
-            assignments[counter] = Assign(var, exp)
-            if isinstance(x.body, List) and x.body.expressions[0].atom == '+':
-               counter += 1
-               explicate_control(x.body.expressions[1], counter, vars, assignments)
-            
-    creturn = []
-    creturn.append(CReturn(Prim(Atom('+'), list(vars.values()))))
-    return CProgram(list(assignments.values()) + creturn)
+            if isinstance(x.bindings, Binding):
+                bindings = x.bindings.bindings 
+                var, exp = bindings
+                vars[counter] = var
+                assignments[counter] = Assign(var, exp)
+                if isinstance(x.body, List) and x.body.expressions[0].atom == '+' and isinstance(x.body.expressions[1], Let):
+                    counter += 1
+                    explicate_control(x.body.expressions[1], counter, vars, assignments)
+                    creturn = []
+                    creturn.append(CReturn(Prim(Atom('+'), list(vars.values()))))
+                    return CProgram(list(assignments.values()) + creturn)
+            elif isinstance(x.bindings, list):
+                bindings = x.bindings
+                var, exp = bindings
+                vars[counter] = var
+                assignments[counter] = Assign(var, exp)
+                
+                if isprim_addition(x.body) and x.body.expressions[0].atom == '+':
+                    exp1 = x.body.expressions[1]
+                    exp2 = x.body.expressions[2]
+                    prim_exps = []
+                    prim_exps.append(exp1)
+                    prim_exps.append(exp2)
+                    cret = []
+                    cret.append(CReturn(Prim(Atom('+'), prim_exps)))
+                    return CProgram(list(assignments.values()) + cret)
+
+def isprim_addition(ast):
+    match ast:
+        case x if isinstance(x, List) and x.expressions[0].atom =='+':
+            return isinstance(x.expressions[1], Int) and isinstance(x.expressions[2], Atom)
