@@ -103,6 +103,27 @@ def explicate_control(ast, counter, vars, assignments):
                     cret.append(CReturn(Prim(Atom('+'), prim_exps)))
                     return CProgram(list(assignments.values()) + cret)
 
+                elif isinstance(bindings[1], Let):
+                    program = explicate_control(bindings[1], 0, {}, {})
+                    bind = bindings[0]
+                    assigns = []
+                    ret = []
+                    for statement in program.exps:
+                        if isinstance(statement, Assign):
+                            assigns.append(statement)
+                        else:
+                            ret.append(statement)
+
+                    retexp = ret[0].exps
+                    new_assigment = Assign(bind, retexp)
+                    assigns.append(new_assigment)
+                    newret = CReturn(bind)
+                    ret = []
+                    ret.append(newret)
+                    return CProgram(assigns + ret)
+
+
+
 def isprim_addition(ast):
     match ast:
         case x if isinstance(x, List) and x.expressions[0].atom =='+':
