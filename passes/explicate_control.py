@@ -68,6 +68,8 @@ def explicate_control(ast, counter, vars, assignments):
             temp1 = - 3
             x = 10 + temp1
             return x
+    Example 5:
+         (+ 3 4)
     """
     
     vars = vars
@@ -121,10 +123,18 @@ def explicate_control(ast, counter, vars, assignments):
                     ret = []
                     ret.append(newret)
                     return CProgram(assigns + ret)
+        case x if isprim_addition(x):
+            e1 = x.expressions[1]
+            e2 = x.expressions[2]
+            exps = []
+            exps.append(e1)
+            exps.append(e2)
+            
+            return CProgram(CReturn(Prim(Atom('+'), exps)))
 
 
 
 def isprim_addition(ast):
     match ast:
         case x if isinstance(x, List) and x.expressions[0].atom =='+':
-            return isinstance(x.expressions[1], Int) and isinstance(x.expressions[2], Atom)
+            return isinstance(x.expressions[1], Int) and (isinstance(x.expressions[2], Atom) or isinstance(x.expressions[2], Int))
