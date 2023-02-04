@@ -35,6 +35,9 @@ def explicate_control(ast, counter, vars, assignments):
     Make order of execution clear.
 
     @param ast
+    @param counter: counter for dictionaries
+    @param vars: dict
+    @param assignments: dict
     @returns: ast with clear order of exceution
 
     Example:
@@ -129,7 +132,7 @@ def explicate_control(ast, counter, vars, assignments):
             exps = []
             exps.append(e1)
             exps.append(e2)
-            
+
             return CProgram(CReturn(Prim(Atom('+'), exps)))
 
 
