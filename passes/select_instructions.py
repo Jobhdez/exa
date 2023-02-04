@@ -51,7 +51,26 @@ def select_instructions(ast):
     @returns: assembly (x86-64) based ast.
 
     Example:
-        (+ 2 3)
+        start:
+         x.1 = 2
+         x.2 = 5
+         return x.1 + x.2
+        ->
+        movq 2, x
+        addq 5, x
+        retq
+
+    Example 2:
+         start:
+           x.1 = 1
+           x.2 = 4
+           x.3 = 5
+           return x.1 + x.2 + x.4
+        ->
+        movq 1, x1
+        addq 4, x1
+        addq 5, x1
+        retq
 
     """
 
@@ -70,3 +89,53 @@ def select_instructions(ast):
             assembly_program.append(instr2)
             assembly_program.append(instr3)
             return AssemblyProgram(assembly_program)
+
+        case x if isinstance(x, CProgram):
+            exps = x.exps
+            ret = exps[len(exps)-1]
+            ret = ret.exps
+            if isinstance(ret, Prim):
+                """if exps[2].exps.op == '+':
+                    var = exps[0].var
+                    exp = exps[0].exp
+                    var2 = exps[1].var
+                    exp2 = exps[1].exp
+                    imm = Immediate(exp)
+                    imm2 = Immediate(exp2)
+                    new_var = 'z'
+
+                    instr = Instruction('movq', imm, new_var)
+                    instr2 = Instruction('addq', imm2, new_var)
+                    instr3 = Retq('retq')
+                    instrs = []
+                    instrs.append(instr)
+                    instrs.append(instr2)
+                    instrs.append(instr3)
+                    return AssemblyProgram(instrs)
+            else:"""
+                length = len(exps)
+                ret = exps[length-1]
+                assi1 = exps[0]
+                var = assi1.var
+                rest_assi = exps[1:]
+                firsts = rest_assi[:-1]
+                addqs = [make_addqs(x,var) for x in firsts]
+                imm = Immediate(assi1.exp)
+                instr = Instruction('movq', imm, var)
+                retq = Retq('retq')
+                instrs = []
+                instrs.append(instr)
+                instrs = instrs + addqs
+                instrs.append(retq)
+                return AssemblyProgram(instrs)
+
+def make_addqs(assignment, var):
+    exp = assignment.exp
+    instr = Instruction('addq', Immediate(exp), var)
+    return instr
+        
+
+
+
+
+        
