@@ -94,25 +94,7 @@ def select_instructions(ast):
             exps = x.exps
             ret = exps[len(exps)-1]
             ret = ret.exps
-            if isinstance(ret, Prim):
-                """if exps[2].exps.op == '+':
-                    var = exps[0].var
-                    exp = exps[0].exp
-                    var2 = exps[1].var
-                    exp2 = exps[1].exp
-                    imm = Immediate(exp)
-                    imm2 = Immediate(exp2)
-                    new_var = 'z'
-
-                    instr = Instruction('movq', imm, new_var)
-                    instr2 = Instruction('addq', imm2, new_var)
-                    instr3 = Retq('retq')
-                    instrs = []
-                    instrs.append(instr)
-                    instrs.append(instr2)
-                    instrs.append(instr3)
-                    return AssemblyProgram(instrs)
-            else:"""
+            if isinstance(ret, Prim) and all(isinstance(x, Atom) for x in ret.operands):
                 length = len(exps)
                 ret = exps[length-1]
                 assi1 = exps[0]
@@ -128,6 +110,7 @@ def select_instructions(ast):
                 instrs = instrs + addqs
                 instrs.append(retq)
                 return AssemblyProgram(instrs)
+        
 
 def make_addqs(assignment, var):
     exp = assignment.exp
