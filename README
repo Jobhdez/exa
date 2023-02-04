@@ -1,5 +1,5 @@
 +----------------+
-| exa: a scheme compiler
+| exa: a compiler for a very small subset of scheme, namely `let` expressions and addition.
 |
 +----------------+
 
