@@ -94,10 +94,10 @@ class Binding:
 
 def parse_tree_to_ast(tree):
     """
-    converts the original parse tree into a new parse tree.
+    converts the parse tree into an abstract synstax tree.
 
-    @param tree: the original parse tree
-    @returns: a new parse tree.
+    @param tree: the parse tree
+    @returns: abstract syntax tree
     """
     match tree:
         case x if isinstance(x, lark.tree.Tree):
