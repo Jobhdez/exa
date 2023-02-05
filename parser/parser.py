@@ -92,7 +92,7 @@ class Binding:
     def __repr__(self):
         return f'{self.bindings}'
 
-def make_parse_tree(tree):
+def parse_tree_to_ast(tree):
     """
     converts the original parse tree into a new parse tree.
 
