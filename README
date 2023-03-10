@@ -9,6 +9,14 @@ Note: so far the compiler generates mostly correct instructions except for the r
 
 This is an experiement to see how I would build a more substantial compiler in Python3. Just trying things out.
 
++------------+
+Architecture |
++------------+
+
+To create the ast you need to call `parse_tree_to_ast(parser.parse("(let ((n 3))  (+ n n))")
+
+ast --> uniquify --> remove-complex -> explicate-control --> instruction selection
+
 +-------------+
 | dependencies|
 |             |
@@ -22,6 +30,8 @@ This is an experiement to see how I would build a more substantial compiler in P
 +-----------------+
 
 1) `git clone git@github.com:Jobhdez/exa.git`
+2) exec(open('compile.py').read())
+3) >> compile(<expr>)
 
 +-----------------+
 | Acknowledgements |
