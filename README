@@ -4,10 +4,10 @@
 +----------------+
 
 I am just doing this project out of curiosity. I want to know how it is like to build a compiler in Python; so far, I am having fun programming this. Thanks
-It compiles a lot of `let` expressions and `sums` to a series of assembly instructions via the `select-instructions` pass.
+It compiles `let` expressions and `primitives` to a series of assembly instructions via the `select-instructions` pass.
 Note: so far the compiler generates mostly correct instructions except for the registers -- it uses the variables as registers.
 
-This is an experiement to see how I would build a compiler in Python3. Just trying things out.
+This is an experiement to see how I would build a more substantial compiler in Python3. Just trying things out.
 
 +-------------+
 | dependencies|
